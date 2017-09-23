@@ -9,7 +9,6 @@
 
 #ВОПРОСЫ
 #1. Как сделать отсортированную таблицу
-#2. Как сделать так, чтобы в маршрутизатор можно было подставлять переменную
 
 
 from flask import Flask
@@ -20,7 +19,7 @@ from hw_requests import get_data
 app = Flask(__name__)
 
 api_key ='0f7dc8d36ff97e51c59f8e2314a5bfe1'
-year = 2016
+#year = 2016
 
 @app.route("/")
 def index():
@@ -37,19 +36,17 @@ def table():
         table += "<tr><td> %s </td> <td> %s </td><td> %s </td> <tr>" % (row['Cells']['Name'], row['Cells']['NumberOfPersons'],(str(row['Cells']['Month']) + ' ' + str(row['Cells']['Year'])))
     table += '</table>'
     return table
-@app.route('/names&year=2016')
-def filter():
+@app.route('/names&year=<int:year>')
+def filter(year):
     url = 'http://api.data.mos.ru/v1/datasets/2009/rows?api_key=%s' %(api_key)
     names = get_data(url)
     table = '<table><tr><th> %s </th> <th> %s </th><th>%s </th></tr>' %('Name','Number','Date')                                                                                              
     for row in names:
         if row['Cells']['Year'] != year:
-            print(row)
             continue
-        print('Yahoo')
+        #print('Yahoo')
         table += "<tr><td> %s </td> <td> %s </td><td> %s </td> <tr>" % (row['Cells']['Name'], row['Cells']['NumberOfPersons'],(str(row['Cells']['Month']) + ' ' + str(row['Cells']['Year'])))
     table += '</table>'  
-    print(table)
     return table
 
 
